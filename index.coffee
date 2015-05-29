@@ -22,7 +22,7 @@ operator = ///    c     # change
           ///
 
 doubleOperator = ///
-                      gg | yy | dd | >> | <<
+                      yy | dd | >> | <<
                  ///
 
 
@@ -67,6 +67,7 @@ motion = ///
             | 0
             | \$
             | \^
+            | gg
             | g_
             | \|
             | (?: \'|` ) (?: [a-z] )
@@ -110,6 +111,8 @@ countAndMotion =   ///
 
 
 match = exports.match = (string) ->
+    int = (str) -> parseInt str, 10
+
     dac = directActionCommand.exec(string)
     if dac? then return { type: 'directActionCommand', count:1, chars:dac[0] }
 
@@ -117,10 +120,10 @@ match = exports.match = (string) ->
     if dop? then return { type: 'operator', count:1, chars:dop[0] }
 
     cao = countAndOperator.exec(string)
-    if cao? then return { type: 'operator', count:cao[1], chars:cao[2] }
+    if cao? then return { type: 'operator', count: int(cao[1]), chars:cao[2] }
 
     cam = countAndMotion.exec(string)
-    if cam? then return { type: 'motion', count:cam[1], chars:cam[2] }
+    if cam? then return { type: 'motion', count:int(cam[1]), chars:cam[2] }
 
     m = motion.exec(string)
     if m? then return { type: 'motion', count:1, chars:m[0] }

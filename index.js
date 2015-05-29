@@ -6,18 +6,21 @@
 
   operator = /c|d|y|!|=|>|</;
 
-  doubleOperator = /gg|yy|dd|>>|<</;
+  doubleOperator = /yy|dd|>>|<</;
 
   directActionCommand = /A|a|C|I|i|J|K|D|m|O|o|P|p|m|R|r|S|s|U|u|V|v|X|x|Y|:|\.|~/;
 
-  motion = /h|l|0|\$|\^|g_|\||(?:\'|`)(?:[a-z])|(?:f|F|t|T)(?:.)|;|,|k|j|\+|-|_|(?:[1-9]+[0-9]*|)G|e|E|w|W|b|B|ge|gE|\(|\)|\{|\}|\]\]|\]\[|\[\[|\[\]|(?:\?|\/)(?:\S+)\n/;
+  motion = /h|l|0|\$|\^|gg|g_|\||(?:\'|`)(?:[a-z])|(?:f|F|t|T)(?:.)|;|,|k|j|\+|-|_|(?:[1-9]+[0-9]*|)G|e|E|w|W|b|B|ge|gE|\(|\)|\{|\}|\]\]|\]\[|\[\[|\[\]|(?:\?|\/)(?:\S+)\n/;
 
   countAndOperator = RegExp("(" + number.source + ")(" + operator.source + ")");
 
   countAndMotion = RegExp("(" + number.source + ")(" + motion.source + ")");
 
   match = exports.match = function(string) {
-    var cam, cao, dac, dop, m;
+    var cam, cao, dac, dop, int, m;
+    int = function(str) {
+      return parseInt(str, 10);
+    };
     dac = directActionCommand.exec(string);
     if (dac != null) {
       return {
@@ -38,7 +41,7 @@
     if (cao != null) {
       return {
         type: 'operator',
-        count: cao[1],
+        count: int(cao[1]),
         chars: cao[2]
       };
     }
@@ -46,7 +49,7 @@
     if (cam != null) {
       return {
         type: 'motion',
-        count: cam[1],
+        count: int(cam[1]),
         chars: cam[2]
       };
     }
